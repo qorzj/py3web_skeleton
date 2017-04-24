@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="description" content="Materialize is a modern responsive CSS framework based on Material Design by Google. ">
+    <title>微信列表@秒差距</title>
+    <!-- Favicons-->
+    <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+    <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+    <!--  Android 5 Chrome Color-->
+    <meta name="theme-color" content="#EE6E73">
+    <!-- CSS-->
+    <link href="css/prism.css" rel="stylesheet">
+    <link href="css/ghpages-materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+    .mullines {
+        display: block;
+        font-family: monospace;
+        white-space: pre;
+        margin: 1em 0;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <div class="row" style="margin-top:100px">
+            <ul id="api_list_view" class="collapsible col l8 offset-l2" data-collapsible="accordion">
+            </ul>
+        </div>
+    </div>
+    
+    <div id='templates' style="display:none">
+        <li>
+            <div class="collapsible-header truncate">
+                <span>GET /apidoc</span> <span class="right">查询接口列表</span>
+            </div>
+            <div class="collapsible-body">
+                <div class="row">
+                    <div class="col l2">
+                        输入
+                    </div>
+                    <div class="col l10 mullines">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col l2">
+                        输出
+                    </div>
+                    <div class="col l10 mullines">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col l2">
+                        说明
+                    </div>
+                    <div class="col l10 mullines">
+                    </div>
+                </div>
+            </div>
+        </li>
+    </div>
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>if (!window.jQuery) { document.write('<script src="bin/jquery-2.1.1.min.js"><\/script>'); }
+    </script>
+    <script src="js/jquery.timeago.min.js"></script>
+    <script src="js/prism.js"></script>
+    <script src="jade/lunr.min.js"></script>
+    <script src="jade/search.js"></script>
+    <script src="bin/materialize.js"></script>
+    <script src="js/init.js"></script>
+    <script src="https://h5.parsec.com.cn/utils/js/python-builtins.js"></script>
+    
+    <script type="text/javascript">
+    HOST = '';
+    function fetch_api_list(ctx) {
+        return (f)=>$.ajax({
+            url: HOST + '/apidoc',
+            headers: {
+                'Authorization': 'Basic cGFyc2VjOnBhcnNlYzAzMjY='
+            },
+            method: 'GET',
+            success: f
+        });
+    }
+    function show_api_list(data, ctx) {
+        for (var item of data) {
+            var node = $("#templates li").first().clone();
+            node.find("span").first().text(item.method + ' ' + item.uri);
+            node.find("span").last().text(item.title);
+            node.find(".l10").slice(0).first().text(get_input_node(item.input));
+            node.find(".l10").slice(1).first().text(JSON.stringify(item.output, null, 2));
+            node.find(".l10").slice(2).first().text(item.doc);
+            $("#api_list_view").append(node);
+        }
+    }
+    function get_input_node(input_list) {
+        var ret = [];
+        for ([name, t, d] of input_list) {
+            var tmp = [name];
+            tmp.append('类型:' + (t == "<class 'inspect._empty'>" ? 'str' : t.replace('class ', '')));
+            if (d !== "<empty>") tmp.append('默认值:' + d);
+            ret.append('    '.join(tmp));
+        }
+        return '\n'.join(ret);
+    }
+    </script>
+    <script type="text/javascript">
+    load_api_list = $Y(fetch_api_list, show_api_list, {});
+    load_api_list();
+    </script>
+  </body>
+</html>

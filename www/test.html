@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/swiper.min.css">
+	<style>
+		.bannercontainer{
+      width: 100%;
+      height:px2rem(380);
+      overflow: hidden;
+      z-index: 1;
+    }
+    .swiper-slide {
+        text-align: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+      .page{
+      	  background: #cecece url('../images/b.png') no-repeat;
+  @include display-flex();
+  @include flex-direction(column);
+  background-size: 100% auto;
+  color: #000;
+  font-weight: 300;
+  line-height: px2rem(40);
+      }
+	</style>
+</head>
+<body>
+<div class="page">
+	<div class="bannercontainer">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="images/H5_v2_01(1).png" alt="">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="images/H5_v2_01.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+</div>
+	
+                         <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script type="text/javascript">
+    	var swiper1 = new Swiper('.bannercontainer', {
+
+
+    autoplay: 2500,
+    autoplayDisableOnInteraction: false,
+    loop : true,
+});
+    </script>
+</body>
+</html>
